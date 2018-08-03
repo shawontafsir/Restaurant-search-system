@@ -1,0 +1,69 @@
+{% extends 'restaurant/base.html' %}
+{% block order_active %}active{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        {% if confirmed %}
+            <div class="col-sm-6" style="box-shadow: 10px 10px 5px grey">
+                <h5>Your ordered item</h5>
+                <pre><strong>    Id       Quantity * Per Price</strong></pre>
+                <form method="post" action ="{% url 'restaurant:order' %}">
+                    {% csrf_token %}
+                    <ul>
+                        {% for key,value in total.items %}
+                        <li type="none"><h4>{{key}} ----- {{value}}</h4></li><br>
+                        {% endfor %}
+                    </ul>
+                    <h3><strong>Total Price : {{sum}}</strong></h3>
+                    <input type="hidden" name="form_type" value="confirm_again_form" />
+                    <button type="submit" class="btn btn-default">confirm(Again)</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="col-sm-3" style="box-shadow: 10px 10px 5px grey;">
+                <h5><strong>Select a restaurant to see menu</strong></h5>
+                <form method="post" action ="{% url 'restaurant:order' %}">
+                    {% csrf_token %}
+                    <select name="selected" class="selectpicker" data-hide-disabled="true" data-live-search="true">
+                        {% for restaurant in restaurants %}
+                        <option>{{ restaurant.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="form_type" value="select_form" />
+                    <button type="submit" class="btn btn-default">menu</button>
+                </form>
+            </div>
+            <div class="col-sm-5" style="box-shadow: 10px 10px 5px grey;">
+                <h5>Restaurant's Menu</h5>
+                <pre><strong>      Id      food_name        price </strong></pre>
+                <form action="{% url 'restaurant:order' %}" method="post">
+                    {% csrf_token %}
+                    <ul>
+                        {% for m in selected_restaurant.menu_set.all %}
+                        <li type="none"><h4> <input type="checkbox" name="selected" value={{m.id}} >{{m.id}}. {{m.foodname}}  --  {{m.price}}</h4></li> <br>
+                        {% endfor %}
+                    </ul>
+                    <input type="hidden" name="form_type" value="order_form" />
+                    <button type="submit" class="btn btn-default">submit</button>
+                </form>
+            </div>
+            <div class="col-sm-4" style="box-shadow: 10px 10px 5px grey;">
+                <h5>Your ordered item</h5>
+                <pre><strong>    Id       Quantity</strong></pre>
+                    <form action="{% url 'restaurant:order' %}" method="post">
+                        {% csrf_token %}
+                        <ul>
+                            {% for foodid in ordered %}
+                            <li type="none"><h4>{{foodid}} <input type="number" name={{foodid}} min="0" max="10" ></h4></li> <br>
+                            {% endfor %}
+                        </ul>
+                        <input type="hidden" name="form_type" value="confirm_form" />
+                        <button type="submit" class="btn btn-default">confirm</button>
+                    </form>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

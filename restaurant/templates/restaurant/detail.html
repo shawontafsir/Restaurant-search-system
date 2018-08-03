@@ -1,0 +1,76 @@
+{% extends 'restaurant/base.html' %}
+{% block restaurants_active %}active{% endblock %}
+
+{% block body %}
+<div style="background-color:rgb(128,128,128);">
+    <div style="background-color:rgb(255,255,255);margin-top:20px;margin-left:80px;margin-right:200px;">
+        <h1>{{restaurant.name}}</h1>
+        <p><strong>Address : {{restaurant.address}}</strong></p>
+        <div style="background-color:rgb(200,200,200);">
+            <p><strong> RATE THIS RESTAURANT : </strong></p>
+            <form method="post" action="/restaurant/{{ restaurant.name }}/" style="overflow: hidden;display: inline-block;">
+                {% csrf_token %}
+
+                <input type="radio" id="star1" name="rating" value="1" onclick="this.form.submit();"/>
+                    <label for="star1" title="YAK!">1</label>
+                <input type="radio" id="star2" name="rating" value="2" onclick="this.form.submit();"/>
+                    <label for="star2" title="bad">2</label>
+                <input type="radio" id="star3" name="rating" value="3" onclick="this.form.submit();"/>
+                    <label for="star3" title="average">3</label>
+                <input type="radio" id="star4" name="rating" value="4" onclick="this.form.submit();"/>
+                    <label for="star4" title="good">4</label>
+                <input type="radio" id="star5" name="rating" value="5" onclick="this.form.submit();"/>
+                    <label for="star5" title="pretty good">5</label>
+                <input type="hidden" name="form_type" value="rating_form" />
+            </form>
+            {% if rate %}
+                <p><strong>Your given rating is {{ rate }}</strong></p>
+            {% endif %}
+        </div>
+        <div>
+            <h4>Cuisine : {{restaurant.cuisine}}</h4>
+            <h4>cost per food : TK {{restaurant.costperfood}}</h4>
+            <h4>Time : {{restaurant.time}}</h4>
+        </div>
+    </div>
+
+    <div style="background-color:rgb(255,255,255);margin-top:20px;margin-left:80px;margin-right:200px;">
+        <div style="margin-left:20px;width:50%;">
+            <h3>Menu : </h3>
+            <table  class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price (TK)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in restaurant.menu_set.all %}
+                    <tr>
+                        <td>{{m.foodname}}</td>
+                        <td>{{m.price}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="background-color:rgb(255,255,255);margin-top:20px;margin-left:80px;margin-right:200px;">
+        <div style="margin-left:10px">
+        <h3>Reviews : </h3>
+        {% for m in restaurant.review_set.all %}
+            <h3>{{m.username}}</h3>
+            <h5>{{m.review}}</h5>
+        {% endfor %}
+            <h4>COMMENT:</h4>
+            <form method="post" action="/restaurant/{{ restaurant.name }}/">
+                {% csrf_token %}
+                <textarea rows="6" cols="100" name="comment" minlength="1" maxlength="100" placeholder="Write your comment..."></textarea>
+                <input type="hidden" name="form_type" value="comment_form" />
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

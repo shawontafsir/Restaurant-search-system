@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Restaurant Advisor{% endblock %}</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+
+    <style>
+        body{
+            background-color:rgb(220,220,220)
+        }
+
+        {% block extra_style %}
+        {% endblock %}
+    </style>
+    <script>
+        function show_value1(x)
+        {
+         document.getElementById("slider_value1").innerHTML=x;
+        }
+        function show_value2(x)
+        {
+         document.getElementById("slider_value2").innerHTML=x;
+        }
+    </script>
+</head>
+<body>
+<div class="contain">
+    {% load static %}
+    <img src="{% static 'sdproject/website_header.jpg' %}" style="width:100%;height:120px;opacity:0.4;"/>
+</div>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+        <!-- Header -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'home:home' %}">Home</a>
+        </div>
+
+        <!-- Items -->
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+                <li class="{% block restaurants_active %}{% endblock %}"><a href="{% url 'restaurant:restaurants' %}"><span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp; Restaurants</a></li>
+                <li class="{% block deals_active %}{% endblock %}"><a href="#"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>&nbsp; Deals</a></li>
+                <li class="{% block order_active %}{% endblock %}"><a href="{% url 'restaurant:order' %}"><span class="glyphicon glyphicon-glass" aria-hidden="true"></span>&nbsp; Give Order</a></li>
+            </ul>
+
+            <form class="navbar-form navbar-left" role="search" method="get" action="{% url 'restaurant:search' %}">
+                <div class="form-group">
+                    <input type="text" width="50" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="search by restaurant name or cuisine">
+                </div>
+                <button type="submit" class="btn btn-default">search</button>
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if is_valid %}
+                <li class="{% block user_active %}{% endblock %}">
+                    <a href="{% url 'register:profile' %}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>   {{ user.name }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'register:logout' %}">
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout
+                    </a>
+                </li>
+                {% else %}
+                <li >
+                    <a href="{% url 'register:login' %}"  class="{% block login_active %}{% endblock %}">
+                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp; Login
+                    </a>
+                </li>
+                <li class="{% block register_active %}{% endblock %}">
+                    <a href="{% url 'register:register' %}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Register
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% block body %}
+{% endblock %}
+</body>
+</html>

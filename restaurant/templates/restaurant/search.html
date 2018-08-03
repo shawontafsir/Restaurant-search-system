@@ -1,0 +1,49 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Restaurnats{% endblock %}
+{% block restaurants_active %}active{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h3>Your searched restaurants:</h3>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3" style="background-color:white;">
+            <div data-role="main" class="ui-content">
+                <form method="post" action="{% url 'restaurant:restaurants' %}">
+                    {% csrf_token %}
+                    <p><strong>Cost per food range:</strong></p>
+                    <label for="price-min">min: </label> <span id="slider_value1" style="color:black;">0</span> <span>TK</span>
+                    <input type="range" name="price-min" id="price-min" value="100" min="0" max="2000" onchange=show_value1(this.value);>
+                    <label for="price-max">max: </label> <span id="slider_value2" style="color:black;">0</span> <span>TK</span>
+                    <input type="range" name="price-max" id="price-max" value="800" min="0" max="2000" onchange="show_value2(this.value);">
+
+                    <input type="hidden" name="form_type" value="range_form" />
+                    <input type="submit" data-inline="true" value="Submit">
+                </form>
+            </div>
+        </div>
+
+        <div class="col-sm-1"></div>
+
+        <div class="col-sm-5" style="background-color:white;">
+            {% if restaurants %}
+                <ul style="list-style-type: none;font-color:black">
+                    {% for restaurant in restaurants %}
+                    <li>
+                        <h2><a href="/restaurant/{{ restaurant.name }}">{{restaurant.name}}</a></h2>
+                        <p><strong>{{ restaurant.address }}</strong></p>
+                        <hr>
+                        <p><strong>Cuisine : </strong>{{restaurant.cuisine}}</p>
+                        <p><strong>cost per food : </strong> TK {{restaurant.costperfood}}</p>
+                        <p><strong>Time : </strong>{{restaurant.time}}</p>
+                        <hr>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h3>Sorry, no matches found. Please retry</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

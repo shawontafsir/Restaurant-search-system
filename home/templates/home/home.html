@@ -1,0 +1,74 @@
+{% extends 'restaurant/base.html' %}
+
+{% block extra_style %}
+    .image {
+       position: relative;
+       width: 100%; /* for IE 6 */
+    }
+
+    h2 {
+       position: absolute;
+       top: 250px;
+       left: 0;
+       width: 100%;
+    }
+
+    h2 span {
+       color: white;
+       font: bold 60px/100px Helvetica, Sans-Serif;
+       letter-spacing: -1px;
+       background: rgb(0, 0, 0); /* fallback color */
+       background: rgba(0, 0, 0, 0.7);
+       padding: 10px;
+    }
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        {% load static %}
+      <div class="item active">
+          <a href="{% url 'restaurant:restaurants' %}">
+            <img src="{% static 'sdproject/image_preview1.jpg' %}" alt="whole foods" style="width:100%;">
+            <h2><span>Wholesome Foods<br/> In One Snap</span></h2>
+          </a>
+      </div>
+
+      <div class="item">
+          <a href="{% url 'restaurant:restaurants' %}">
+            <img src="{% static 'sdproject/image_preview2.jpg' %}" alt="test food" style="width:100%;">
+            <h2><span>Test It<br/>Rank This</span></h2>
+          </a>
+      </div>
+
+      <div class="item">
+          <a href="{% url 'restaurant:order' %}">
+            <img src="{% static 'sdproject/image_preview3.jpg' %}" href="" alt="online order" style="width:100%;">
+            <h2><span>Give Online Order<br/> In Two Minutes</span></h2>
+          </a>
+      </div>
+
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+{% endblock %}
